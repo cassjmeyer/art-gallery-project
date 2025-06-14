@@ -1,11 +1,18 @@
 import { createRoot } from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ArtworkGallery from "./components/ArtworkGallery";
+import ArtworkDetail from "./components/ArtworkDetail";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
-    <div>
-      <ArtworkGallery />
-    </div>
+    <Router>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<ArtworkGallery />} />
+        <Route path="/artwork/:id" element={<ArtworkDetail />} />
+      </Routes>
+    </Router>
   );
 }
 

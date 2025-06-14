@@ -1,5 +1,6 @@
 import React from "react";
 import { Artwork } from "../../types/artwork";
+import { Link } from "react-router-dom";
 import "./ArtworkCard.css";
 
 interface ArtworkCardProps {
@@ -17,7 +18,11 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
   const imageUrl = getImageUrl(artwork.image_id);
 
   return (
-    <div className="artwork-card">
+    <Link
+      to={`/artwork/${artwork.id}`}
+      className="artwork-card"
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
       <div className="artwork-image">
         {imageUrl ? (
           <img src={imageUrl} alt={artwork.title} loading="lazy" />
@@ -33,7 +38,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
           <p className="artwork-date">{artwork.date_display}</p>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 
