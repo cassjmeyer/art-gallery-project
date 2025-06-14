@@ -1,13 +1,10 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
-import ApiTest from "./components/ApiTest";
+import ArtworkGallery from "./components/ArtworkGallery";
 
 function App() {
   return (
     <div>
-      <h1>Art Gallery Project</h1>
-      <p>Welcome to your React application!</p>
-      <ApiTest />
+      <ArtworkGallery />
     </div>
   );
 }
