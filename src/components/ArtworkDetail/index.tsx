@@ -1,23 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Artwork } from "../../types/artwork";
+import { fetchArtworkById, getImageUrl } from "../../services/api";
 import "./ArtworkDetail.css";
-
-interface Artwork {
-  id: number; // ID of specific piece of art
-  title: string; // Title of the piece
-  artist_display: string; // Readable description of the creator of piece (artist name, nationality and lifespan dates)
-  date_display: string; // Period of time associated with the creation of piece
-  place_of_origin: string; // The location where the creation, design, or production of the work took place, or the original location of the work
-  dimensions: string; // The size, shape, scale, and dimensions of the work.
-  medium_display: string; // The substances or materials used in the creation of a work
-  image_id: string | null; // ID of the image to represent piece
-  credit_line: string; // Asset-specific copyright information
-  is_public_domain: boolean; // Whether the work is in the public domain, (created before copyrights existed or has left the copyright term)
-  is_on_view: boolean; // Whether the work is on display
-  gallery_title?: string; // The location of this work in the museum
-  department_title: string; // The department of the museum that the work belongs to
-  artwork_type_title: string; // The type of work (e.g. painting, sculpture, etc.)
-}
 
 const ArtworkDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,13 +11,12 @@ const ArtworkDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchArtwork = async () => {
+    const loadArtwork = async () => {
       try {
-        const response = await fetch(
-          `https://api.artic.edu/api/v1/artworks/${id}`
-        );
-        const data = await response.json();
-        setArtwork(data.data);
+        if (id) {
+          const data = await fetchArtworkById(id);
+          setArtwork(data);
+        }
       } catch (err) {
         setError("Failed to load artwork");
       } finally {
@@ -40,20 +24,13 @@ const ArtworkDetail: React.FC = () => {
       }
     };
 
-    if (id) {
-      fetchArtwork();
-    }
+    loadArtwork();
   }, [id]);
 
   if (loading) return <div className="loading-container">Loading...</div>;
   if (error) return <div className="error-container">Error: {error}</div>;
   if (!artwork)
     return <div className="not-found-container">Artwork not found</div>;
-
-  const getImageUrl = (imageId: string | null) => {
-    if (!imageId) return null;
-    return `https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`;
-  };
 
   const imageUrl = getImageUrl(artwork.image_id);
 
@@ -71,7 +48,7 @@ const ArtworkDetail: React.FC = () => {
           {imageUrl ? (
             <img
               src={imageUrl}
-              alt={artwork.title}
+              alt={artwork.thumbnail?.alt_text || artwork.title}
               className="artwork-detail-image"
             />
           ) : (

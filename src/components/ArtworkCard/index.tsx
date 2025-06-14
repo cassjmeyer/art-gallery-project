@@ -17,17 +17,35 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
 
   const imageUrl = getImageUrl(artwork.image_id);
 
+  // Create accessible description for the link
+  const getLinkLabel = () => {
+    return `View details for ${artwork.title}${
+      artwork.artist_display ? ` by ${artwork.artist_display}` : ""
+    }`;
+  };
+
   return (
     <Link
       to={`/artwork/${artwork.id}`}
       className="artwork-card"
       style={{ textDecoration: "none", color: "inherit" }}
+      aria-label={getLinkLabel()}
     >
       <div className="artwork-image">
         {imageUrl ? (
-          <img src={imageUrl} alt={artwork.title} loading="lazy" />
+          <img
+            src={imageUrl}
+            alt={artwork.thumbnail?.alt_text || artwork.title}
+            loading="lazy"
+          />
         ) : (
-          <div className="no-image">No Image Available</div>
+          <div
+            className="no-image"
+            role="img"
+            aria-label={`No image available for ${artwork.title}`}
+          >
+            No Image Available
+          </div>
         )}
       </div>
 

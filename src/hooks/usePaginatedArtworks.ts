@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Artwork } from "../types/artwork";
+import { fetchArtworks } from "../services/api";
 
 // For my own reference, see available fields from API here: https://api.artic.edu/docs/#fields
 
@@ -30,37 +31,15 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fields to request from API
-  const fields = [
-    "id",
-    "title",
-    "artist_display",
-    "image_id",
-    "date_display",
-    "thumbnail",
-  ].join(",");
-
-  const pageLimit = 20;
-
-  const fetchArtworks = async (page: number) => {
+  const fetchArtworksPage = async (page: number) => {
     setLoading(true);
     setError(null);
 
     try {
-      const url = `https://api.artic.edu/api/v1/artworks?limit=${pageLimit}&page=${page}&fields=${fields}`;
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
+      const data = await fetchArtworks(page);
       setArtworks(data.data);
       setPagination(data.pagination);
       setCurrentPage(page);
-
-      console.log(`Loaded page ${page} with ${data.data.length} artworks`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch artworks");
       console.error("Error fetching artworks:", err);
@@ -71,7 +50,7 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
 
   const goToPage = (page: number) => {
     if (page >= 1 && (!pagination || page <= pagination.total_pages)) {
-      fetchArtworks(page);
+      fetchArtworksPage(page);
     }
   };
 
@@ -89,7 +68,7 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
 
   // Load first page on mount
   useEffect(() => {
-    fetchArtworks(1);
+    fetchArtworksPage(1);
   }, []);
 
   return {

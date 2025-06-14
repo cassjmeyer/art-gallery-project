@@ -18,7 +18,7 @@
 }
 
 @media (max-width: 768px) {
-  .artwork-grid {
+  .artwork-detail-grid {
     grid-template-columns: 1fr;
   }
 }

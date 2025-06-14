@@ -17,7 +17,7 @@ const ArtworkGallery: React.FC = () => {
 
   if (error) {
     return (
-      <div className="error-message">
+      <div className="error-message" role="alert">
         <h2>Oops! Something went wrong</h2>
         <p>{error}</p>
         <button onClick={() => window.location.reload()}>Try Again</button>
@@ -38,13 +38,17 @@ const ArtworkGallery: React.FC = () => {
       </header>
 
       {loading ? (
-        <div className="loading-message">
-          <div className="loading-spinner"></div>
+        <div className="loading-message" aria-label="Loading content">
+          <div className="loading-spinner" aria-hidden="true"></div>
           <p>Loading artworks...</p>
         </div>
       ) : (
         <>
-          <div className="artwork-grid">
+          <div
+            className="artwork-grid"
+            role="grid"
+            aria-label={`Grid of ${artworks.length} artworks`}
+          >
             {artworks.map((artwork) => (
               <ArtworkCard key={artwork.id} artwork={artwork} />
             ))}

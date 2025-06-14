@@ -12,7 +12,6 @@ import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import ESLintWebpackPlugin from "eslint-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
-
 export default async (env, argv) => {
   // Mode for prod. or dev
   const { mode } = argv;
@@ -36,7 +35,7 @@ export default async (env, argv) => {
       static: path.resolve(__dirname, "dist"),
       port,
     },
-    devtool: mode === 'development' ? 'eval-source-map' : undefined,
+    devtool: mode === "development" ? "eval-source-map" : undefined,
     module: {
       rules: [
         // React, TypeScript & Babel
@@ -92,12 +91,12 @@ export default async (env, argv) => {
       new CopyPlugin({
         patterns: [
           {
-            from: './public',
-            to: '', // Copy directly into dist
+            from: "./public",
+            to: "", // Copy directly into dist
           },
         ],
       }),
-  
+
       new BundleAnalyzerPlugin({
         openAnalyzer: false, // Set to TRUE if you want to see results.
       }),
