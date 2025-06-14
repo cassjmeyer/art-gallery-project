@@ -1,19 +1,7 @@
 import { useState, useEffect } from "react";
+import { Artwork } from "../types/artwork";
 
 // For my own reference, see available fields from API here: https://api.artic.edu/docs/#fields
-
-interface Artwork {
-  id: number; // A single piece of art by given id
-  title: string; // The title of the piece
-  artist_display: string; // Readable description of the creator of piece (artist name, nationality and lifespan dates)
-  image_id: string | null; // ID of the image to represent piece
-  date_display?: string; // Period of time associated with the creation of piece
-  thumbnail?: {
-    alt_text: string; // Alt text for the image (for accessibility)
-    width: number; // Native width of the image
-    height: number; // Native height of the image
-  } | null;
-}
 
 interface PaginationInfo {
   total: number; // Total number of artworks in the collection
@@ -82,7 +70,7 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
   };
 
   const goToPage = (page: number) => {
-    if (pagination && page >= 1 && page <= pagination.total_pages) {
+    if (page >= 1 && (!pagination || page <= pagination.total_pages)) {
       fetchArtworks(page);
     }
   };

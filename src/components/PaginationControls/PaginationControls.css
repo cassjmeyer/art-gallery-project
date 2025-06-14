@@ -27,6 +27,12 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  outline: none;
+}
+
+.pagination-btn:focus-visible {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
 }
 
 .pagination-btn:hover:not(:disabled) {

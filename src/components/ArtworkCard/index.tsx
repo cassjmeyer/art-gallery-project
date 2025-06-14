@@ -1,14 +1,9 @@
 import React from "react";
+import { Artwork } from "../../types/artwork";
 import "./ArtworkCard.css";
 
 interface ArtworkCardProps {
-  artwork: {
-    id: number;
-    title: string;
-    artist_display: string;
-    image_id: string | null;
-    date_display?: string;
-  };
+  artwork: Artwork;
 }
 
 const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
