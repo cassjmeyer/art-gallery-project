@@ -17,12 +17,6 @@
   gap: 40px;
 }
 
-@media (max-width: 768px) {
-  .artwork-detail-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .artwork-detail-image {
   width: 100%;
   height: auto;

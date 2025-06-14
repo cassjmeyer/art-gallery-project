@@ -19,13 +19,6 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   onNext,
   loading = false,
 }) => {
-  const handleKeyDown = (event: React.KeyboardEvent, action: () => void) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      action();
-    }
-  };
-
   return (
     <div className="pagination-controls">
       <div className="pagination-info">
@@ -39,7 +32,6 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
       >
         <button
           onClick={onPrevious}
-          onKeyDown={(e) => handleKeyDown(e, onPrevious)}
           disabled={currentPage === 1 || loading}
           className="pagination-btn"
           aria-label={`Go to previous page, currently on page ${currentPage}`}
@@ -53,7 +45,6 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
               <button
                 key={`page-${page}-${index}`}
                 onClick={() => onPageChange(page)}
-                onKeyDown={(e) => handleKeyDown(e, () => onPageChange(page))}
                 disabled={loading}
                 className={`page-number ${
                   page === currentPage ? "active" : ""
@@ -76,7 +67,6 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
 
         <button
           onClick={onNext}
-          onKeyDown={(e) => handleKeyDown(e, onNext)}
           disabled={currentPage === totalPages || loading}
           className="pagination-btn"
           aria-label={`Go to next page, currently on page ${currentPage}`}

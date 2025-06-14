@@ -35,7 +35,7 @@ export default async (env, argv) => {
       static: path.resolve(__dirname, "dist"),
       port,
     },
-    devtool: mode === "development" ? "eval-source-map" : undefined,
+    devtool: "eval-source-map",
     module: {
       rules: [
         // React, TypeScript & Babel

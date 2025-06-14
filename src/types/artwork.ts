@@ -1,7 +1,7 @@
 export interface ArtworkThumbnail {
-  alt_text: string; // Alt text for the image (for accessibility)
-  width: number; // Native width of the image
-  height: number; // Native height of the image
+  alt_text: string | null;
+  width: number | null;
+  height: number | null;
 }
 
 export interface Artwork {
