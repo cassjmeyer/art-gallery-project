@@ -1,0 +1,6 @@
+// Tell TypeScript compiler that webpack asset imports are okay...
+declare module '*.png';
+declare module '*.svg';
+declare module '*.jpg';
+declare module '*.jpeg';
+declare module '*.gif';
