@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ArtworkGallery from "./components/ArtworkGallery";
 import ArtworkDetail from "./components/ArtworkDetail";
 import ScrollToTop from "./components/ScrollToTop";
+import "./index.css";
 
 function App() {
   return (

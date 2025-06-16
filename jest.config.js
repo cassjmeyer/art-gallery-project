@@ -1,4 +1,11 @@
-module.exports = {
+export default {
+  preset: "ts-jest/presets/default-esm",
+  extensionsToTreatAsEsm: [".ts", ".tsx"],
+  globals: {
+    "ts-jest": {
+      useESM: true,
+    },
+  },
   transform: {
     "^.+\\.(ts|tsx|js|jsx)$": "babel-jest",
   },

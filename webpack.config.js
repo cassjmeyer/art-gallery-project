@@ -24,18 +24,22 @@ export default async (env, argv) => {
   const port = await getPort({ port: 6688 });
 
   return {
-    mode: "development",
+    mode: mode || "development",
     target: "web",
     entry: "./src/index.tsx",
     output: {
       filename: "bundle.js",
       path: path.resolve(__dirname, "dist"),
+      clean: true,
+      publicPath: "/",
     },
     devServer: {
       static: path.resolve(__dirname, "dist"),
       port,
+      historyApiFallback: true,
+      hot: true,
     },
-    devtool: "eval-source-map",
+    devtool: mode === "production" ? "source-map" : "eval-source-map",
     module: {
       rules: [
         // React, TypeScript & Babel
@@ -45,10 +49,6 @@ export default async (env, argv) => {
           use: {
             loader: "babel-loader",
             options: {
-              // Executed from last to first?
-              // 1. preset-typescript: Transpiles TS to JS
-              // 2. preset-react: JSX to React.createElement()
-              // 3. preset-env: Babel Transpiles ES6 to ES5 for example
               presets: [
                 "@babel/preset-env",
                 ["@babel/preset-react", { runtime: "automatic" }],
@@ -57,18 +57,26 @@ export default async (env, argv) => {
             },
           },
         },
-        // CSS & Styles
+        // CSS & Styles with PostCSS (for Tailwind)
         {
           test: /\.css$/,
-          // Executed from last to first
-          // 1. css-loader: load CSS from JS imports
-          // 2. style-loader: put CSS into <style> tag
-          use: ["style-loader", "css-loader"],
+          use: [
+            "style-loader",
+            "css-loader",
+            {
+              loader: "postcss-loader",
+              options: {
+                postcssOptions: {
+                  config: path.resolve(__dirname, "postcss.config.js"),
+                },
+              },
+            },
+          ],
         },
         // Raw Assets
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/,
-          type: "asset/resource", // Tells webpack to emit file to build folder and export URL for embedding.
+          type: "asset/resource",
         },
       ],
     },
@@ -78,13 +86,6 @@ export default async (env, argv) => {
     },
     // Plugins
     plugins: [
-      // TODO: Configure ESLint with TypeScript correctly.
-      // new ESLintWebpackPlugin({
-      //   extensions: [".tsx", ".ts", ".jsx", ".js"],
-      //   exclude: ['node_modules', 'dist'],
-      //   eslintPath: path.resolve(),
-      // }),
-
       // Only for TypeScript Type-Checking because babel-loader is only transpiling not type-checking
       new ForkTsCheckerWebpackPlugin(),
 
@@ -92,13 +93,13 @@ export default async (env, argv) => {
         patterns: [
           {
             from: "./public",
-            to: "", // Copy directly into dist
+            to: "",
           },
         ],
       }),
 
       new BundleAnalyzerPlugin({
-        openAnalyzer: false, // Set to TRUE if you want to see results.
+        openAnalyzer: false,
       }),
 
       // Put js bundle script tag into HTML file.
