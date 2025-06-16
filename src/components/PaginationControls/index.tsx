@@ -2,7 +2,7 @@ import React from "react";
 import { getVisiblePages } from "../../utils/paginationUtils";
 import "./PaginationControls.css";
 
-interface PaginationControlsProps {
+export interface PaginationControlsProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;

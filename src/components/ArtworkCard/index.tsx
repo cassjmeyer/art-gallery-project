@@ -3,7 +3,7 @@ import { Artwork } from "../../types/artwork";
 import { Link } from "react-router-dom";
 import "./ArtworkCard.css";
 
-interface ArtworkCardProps {
+export interface ArtworkCardProps {
   artwork: Artwork;
 }
 
