@@ -57,17 +57,6 @@ describe("ArtworkCard", () => {
     );
   });
 
-  it("should render no image placeholder when image is not available", () => {
-    props.artwork.image_id = null;
-    render(
-      <BrowserRouter>
-        <ArtworkCard {...props} />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByText("No Image Available")).toBeInTheDocument();
-  });
-
   it("should render with the correct link to the artwork", () => {
     render(
       <BrowserRouter>
@@ -79,5 +68,16 @@ describe("ArtworkCard", () => {
       "href",
       `/artwork/${props.artwork.id}`
     );
+  });
+
+  it("should render no image placeholder when image is not available", () => {
+    props.artwork.image_id = null;
+    render(
+      <BrowserRouter>
+        <ArtworkCard {...props} />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText("No Image Available")).toBeInTheDocument();
   });
 });
