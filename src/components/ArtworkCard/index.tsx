@@ -1,12 +1,15 @@
 import React from "react";
 import { Artwork } from "../../types/artwork";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export interface ArtworkCardProps {
   artwork: Artwork;
 }
 
 const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
+  const [searchParams] = useSearchParams();
+  const currentPage = searchParams.get("page") || "1";
+
   // Build image URL using Chicago's IIIF service
   // More info on this here: https://api.artic.edu/docs/#iiif-image-api
   const getImageUrl = (imageId: string | null) => {
@@ -25,7 +28,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
 
   return (
     <Link
-      to={`/artwork/${artwork.id}`}
+      to={`/artwork/${artwork.id}?page=${currentPage}`}
       className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 overflow-hidden"
       aria-label={getLinkLabel()}
     >

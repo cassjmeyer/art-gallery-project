@@ -80,10 +80,10 @@ describe("ArtworkDetail", () => {
   it("should render a back button to the gallery link", async () => {
     renderComponent("123");
 
-    const backLink = await screen.findByRole("link", {
+    const backButton = await screen.findByRole("button", {
       name: "Back to Gallery",
     });
-    expect(backLink).toHaveAttribute("href", "/");
+    expect(backButton).toBeInTheDocument();
   });
 
   it("should render the artwork image", async () => {

@@ -66,7 +66,7 @@ describe("ArtworkCard", () => {
 
     expect(screen.getByRole("link")).toHaveAttribute(
       "href",
-      `/artwork/${props.artwork.id}`
+      `/artwork/${props.artwork.id}?page=1`
     );
   });
 

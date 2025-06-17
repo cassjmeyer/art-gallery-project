@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Artwork } from "../types/artwork";
 import { fetchArtworks } from "../services/api";
 
@@ -29,7 +30,9 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   const fetchArtworksPage = async (page: number) => {
     setLoading(true);
@@ -39,7 +42,6 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
       const data = await fetchArtworks(page);
       setArtworks(data.data);
       setPagination(data.pagination);
-      setCurrentPage(page);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch artworks");
       console.error("Error fetching artworks:", err);
@@ -49,9 +51,8 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
   };
 
   const goToPage = (page: number) => {
-    if (page >= 1 && (!pagination || page <= pagination.total_pages)) {
-      fetchArtworksPage(page);
-    }
+    setCurrentPage(page);
+    setSearchParams({ page: page.toString() });
   };
 
   const nextPage = () => {
@@ -61,15 +62,15 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
   };
 
   const previousPage = () => {
-    if (currentPage > 1) {
+    if (pagination && currentPage > 1) {
       goToPage(currentPage - 1);
     }
   };
 
-  // Load first page on mount
+  // Watch for currentPage changes and fetch new data
   useEffect(() => {
-    fetchArtworksPage(1);
-  }, []);
+    fetchArtworksPage(currentPage);
+  }, [currentPage]);
 
   return {
     artworks,

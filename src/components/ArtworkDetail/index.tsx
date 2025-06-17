@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Artwork } from "../../types/artwork";
 import { fetchArtworkById, getImageUrl } from "../../services/api";
 
 const ArtworkDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [artwork, setArtwork] = useState<Artwork | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const queryParams = new URLSearchParams(location.search);
+  const fromPage = queryParams.get("page") || "1";
+
+  const handleBackClick = () => {
+    navigate(`/gallery?page=${fromPage}`);
+  };
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -40,36 +49,22 @@ const ArtworkDetail: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error || !artwork) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <Link
-            to="/"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
-          >
-            Back to Gallery
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (!artwork) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Artwork not found
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            {error ? "Error" : "Artwork not found"}
           </h2>
-          <Link
-            to="/"
+          <p className="text-gray-600 mb-6">
+            {error || "This artwork does not exist."}
+          </p>
+          <button
+            onClick={handleBackClick}
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
           >
             Back to Gallery
-          </Link>
+          </button>
         </div>
       </div>
     );
@@ -82,8 +77,8 @@ const ArtworkDetail: React.FC = () => {
       {/* Header with Back Button */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link
-            to="/"
+          <button
+            onClick={handleBackClick}
             className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 group"
           >
             <svg
@@ -100,7 +95,7 @@ const ArtworkDetail: React.FC = () => {
               />
             </svg>
             Back to Gallery
-          </Link>
+          </button>
         </div>
       </header>
 
