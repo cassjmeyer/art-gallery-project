@@ -10,7 +10,7 @@ export const BASE_ROUTES = {
 
 export const buildRoute = {
   gallery: (page?: number) =>
-    page && page > 1
+    typeof page === "number"
       ? `/${BASE_PATHS.GALLERY}?page=${page}`
       : `/${BASE_PATHS.GALLERY}`,
 
