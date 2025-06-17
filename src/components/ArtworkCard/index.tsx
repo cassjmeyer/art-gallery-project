@@ -1,7 +1,6 @@
 import React from "react";
 import { Artwork } from "../../types/artwork";
 import { Link } from "react-router-dom";
-import "./ArtworkCard.css";
 
 export interface ArtworkCardProps {
   artwork: Artwork;
@@ -27,34 +26,63 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({ artwork }) => {
   return (
     <Link
       to={`/artwork/${artwork.id}`}
-      className="artwork-card"
-      style={{ textDecoration: "none", color: "inherit" }}
+      className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 overflow-hidden"
       aria-label={getLinkLabel()}
     >
-      <div className="artwork-image">
+      {/* Image Container */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={artwork.thumbnail?.alt_text || artwork.title}
             loading="lazy"
+            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
           />
         ) : (
           <div
-            className="no-image"
+            className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400"
             role="img"
             aria-label={`No image available for ${artwork.title}`}
           >
-            No Image Available
+            <p className="text-sm font-medium">No Image Available</p>
           </div>
         )}
       </div>
 
-      <div className="artwork-info">
-        <h3 className="artwork-title">{artwork.title}</h3>
-        <p className="artwork-artist">{artwork.artist_display}</p>
-        {artwork.date_display && (
-          <p className="artwork-date">{artwork.date_display}</p>
+      {/* Content */}
+      <div className="p-4 space-y-2">
+        <h3 className="font-semibold text-gray-900 text-lg leading-tight group-hover:text-teal-700 transition-colors duration-300">
+          {artwork.title}
+        </h3>
+
+        {artwork.artist_display && (
+          <p className="text-gray-600 text-sm font-medium ">
+            {artwork.artist_display}
+          </p>
         )}
+
+        {artwork.date_display && (
+          <p className="text-gray-500 text-sm">{artwork.date_display}</p>
+        )}
+      </div>
+
+      {/* Hover Arrow Indicator */}
+      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
+          <svg
+            className="w-4 h-4 text-teal-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </div>
       </div>
     </Link>
   );
