@@ -22,19 +22,23 @@ describe("PaginationControls", () => {
 
   it("should render current page and total pages information", () => {
     render(<PaginationControls {...props} />);
-    expect(screen.getByText("Page 2 of 5")).toBeInTheDocument();
+    expect(
+      screen.getByText((content, element) => {
+        return element?.textContent === "Page 2 of 5";
+      })
+    ).toBeInTheDocument();
   });
 
   it("should render Previous and Next buttons", () => {
     render(<PaginationControls {...props} />);
 
-    expect(screen.getByText("Previous")).toBeInTheDocument();
+    expect(screen.getByText("Prev")).toBeInTheDocument();
     expect(screen.getByText("Next")).toBeInTheDocument();
   });
 
   it("should call onPrevious when Previous button is clicked", () => {
     render(<PaginationControls {...props} />);
-    fireEvent.click(screen.getByText("Previous"));
+    fireEvent.click(screen.getByText("Prev"));
     expect(props.onPrevious).toHaveBeenCalledTimes(1);
   });
 
@@ -46,7 +50,7 @@ describe("PaginationControls", () => {
 
   it("should disable Previous button when on first page", () => {
     render(<PaginationControls {...props} currentPage={1} />);
-    expect(screen.getByText("Previous")).toBeDisabled();
+    expect(screen.getByText("Prev")).toBeDisabled();
   });
 
   it("should disable Next button when on last page", () => {
@@ -56,7 +60,7 @@ describe("PaginationControls", () => {
 
   it("should disable all buttons when loading", () => {
     render(<PaginationControls {...props} loading={true} />);
-    expect(screen.getByText("Previous")).toBeDisabled();
+    expect(screen.getByText("Prev")).toBeDisabled();
     expect(screen.getByText("Next")).toBeDisabled();
 
     // Check that page number buttons are also disabled
@@ -70,11 +74,12 @@ describe("PaginationControls", () => {
     render(<PaginationControls {...props} />);
 
     // Check that current page is marked as active
-    const activeButton = screen.getByText("2");
-    expect(activeButton).toHaveClass("active");
+    const activeButton = screen.getByRole("button", { current: "page" });
+    expect(activeButton).toHaveClass("ring-blue-600", "shadow-sm");
 
     // Click on a different page number
-    fireEvent.click(screen.getByText("3"));
+    const page3Button = screen.getByRole("button", { name: "Go to page 3" });
+    fireEvent.click(page3Button);
     expect(props.onPageChange).toHaveBeenCalledWith(3);
   });
 
@@ -94,7 +99,7 @@ describe("PaginationControls", () => {
       "Pagination Navigation"
     );
 
-    expect(screen.getByText("Previous")).toHaveAttribute(
+    expect(screen.getByText("Prev")).toHaveAttribute(
       "aria-label",
       "Go to previous page, currently on page 2"
     );

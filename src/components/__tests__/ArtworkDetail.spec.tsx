@@ -108,9 +108,7 @@ describe("ArtworkDetail", () => {
     renderComponent("123");
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Error: Failed to load artwork")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Failed to load artwork")).toBeInTheDocument();
     });
   });
 

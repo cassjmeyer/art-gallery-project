@@ -47,7 +47,7 @@ const ArtworkGallery: React.FC = () => {
               Art Institute of Chicago
             </h1>
             <p className="text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-              Collection of the Art Institute of Chicago
+              Every Work. Every Era. All in One Collection.
             </p>
             {pagination && (
               <div className="mt-4 inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-100/60 to-yellow-100/60 rounded-full border border-amber-200/50">
