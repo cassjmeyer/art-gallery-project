@@ -40,6 +40,16 @@ export const usePaginatedArtworks = (): UsePaginatedArtworksResult => {
 
     try {
       const data = await fetchArtworks(page);
+
+      if (data.pagination && page > data.pagination.total_pages) {
+        console.log("This worked!");
+        setError(
+          `Page ${page} does not exist. The maximum page is ${data.pagination.total_pages}.`
+        );
+        setLoading(false);
+        return;
+      }
+
       setArtworks(data.data);
       setPagination(data.pagination);
     } catch (err) {
